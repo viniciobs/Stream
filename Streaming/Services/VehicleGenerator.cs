@@ -1,5 +1,6 @@
 ﻿using Streaming.Models;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Streaming.Services
 {
@@ -31,7 +32,33 @@ namespace Streaming.Services
 
         private Vehicle ExtractVehicleFromHTML(string htmlSection)
         {
-            return default;
+            const string pattern = "<input.+id=\"{0}\".+value=\"(.[^\"]+)\"";
+            try
+            {
+                var vehicle = new Vehicle();
+
+                var match = Regex.Match(htmlSection, string.Format(pattern, "marca"));
+                vehicle.Manufacturer = match.Groups[1].Value;
+
+                match = Regex.Match(htmlSection, string.Format(pattern, "modelo"));
+                vehicle.Model = match.Groups[1].Value;
+
+                match = Regex.Match(htmlSection, string.Format(pattern, "ano"));
+                vehicle.Year = Convert.ToInt32(match.Groups[1].Value);
+
+                match = Regex.Match(htmlSection, string.Format(pattern, "placa_veiculo"));
+                vehicle.VIN = match.Groups[1].Value;
+
+                match = Regex.Match(htmlSection, string.Format(pattern, "cor"));
+                vehicle.BodyColour = match.Groups[1].Value;
+
+                return vehicle;
+            }
+            catch (Exception exception)
+            {
+                //_logger.LogError("Unable to extract vehicle from html." + Environment.NewLine + exception.Message);
+                return null;
+            }
         }
 
         public async Task<object> GenerateOneAsync()
