@@ -29,10 +29,6 @@
 
                 sendAction(item);
 
-                var intervalInSeconds = random.Next(0, 5) * 1000;
-
-                Thread.Sleep(intervalInSeconds);
-
                 itemsQuantity--;
             }
             while (itemsQuantity > 0);

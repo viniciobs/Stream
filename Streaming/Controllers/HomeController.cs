@@ -20,12 +20,10 @@ namespace Streaming.Controllers
 
             try
             {
-                var sendAction = delegate (object obj)
+                streamService.Stream((object obj) =>
                 {
                     Send(obj);
-                };
-
-                streamService.Stream(sendAction);
+                });
 
                 return Streaming();
             }

@@ -6,28 +6,16 @@ namespace Streaming.Services
 {
     public class VehicleGenerator : IItemGenerator
     {
+        private const string URI = "https://www.4devs.com.br/ferramentas_online.php";
+
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
-        private readonly HttpRequestMessage _httpRequestMessage;
 
         public VehicleGenerator()
         {
             //_logger = logger;
 
             _httpClient = new HttpClient();
-
-            var content = new[]
-            {
-                new KeyValuePair<string, string>("acao", "gerar_veiculo"),
-                new KeyValuePair<string, string>("pontuacao", "S")
-            };
-
-            _httpRequestMessage = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri("https://www.4devs.com.br/ferramentas_online.php"),
-                Content = new FormUrlEncodedContent(content)
-            };
         }
 
         private Vehicle ExtractVehicleFromHTML(string htmlSection)
@@ -65,7 +53,13 @@ namespace Streaming.Services
         {
             //_logger.LogInformation("Generating vehicle");
 
-            var response = await _httpClient.SendAsync(_httpRequestMessage);
+            var data = new[]
+            {
+                new KeyValuePair<string, string>("acao", "gerar_veiculo"),
+                new KeyValuePair<string, string>("pontuacao", "S")
+            };
+
+            var response = await _httpClient.PostAsync(URI, new FormUrlEncodedContent(data));
             var content = await response.Content.ReadAsStringAsync();
             var vehicle = ExtractVehicleFromHTML(content);
 
