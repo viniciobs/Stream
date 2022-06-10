@@ -1,5 +1,4 @@
 ﻿using Streaming.Models;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Streaming.Services
@@ -11,16 +10,18 @@ namespace Streaming.Services
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
 
-        public VehicleGenerator()
+        public VehicleGenerator(ILogger<VehicleGenerator> logger)
         {
-            //_logger = logger;
-
+            _logger = logger;
             _httpClient = new HttpClient();
         }
 
         private Vehicle ExtractVehicleFromHTML(string htmlSection)
         {
+            _logger.LogInformation("Extracting vehicle from html");
+
             const string pattern = "<input.+id=\"{0}\".+value=\"(.[^\"]+)\"";
+
             try
             {
                 var vehicle = new Vehicle();
@@ -44,14 +45,14 @@ namespace Streaming.Services
             }
             catch (Exception exception)
             {
-                //_logger.LogError("Unable to extract vehicle from html." + Environment.NewLine + exception.Message);
+                _logger.LogError("Unable to extract vehicle from html." + Environment.NewLine + exception.Message);
                 return null;
             }
         }
 
         public async Task<object> GenerateOneAsync()
         {
-            //_logger.LogInformation("Generating vehicle");
+            _logger.LogInformation("Generating vehicle");
 
             var data = new[]
             {

@@ -5,16 +5,11 @@
         private readonly ILogger _logger;
         private readonly IItemGenerator _itemGenerator;
 
-        public StreamService(IItemGenerator itemGenerator)
+        public StreamService(ILogger<StreamService> logger, IItemGenerator itemGenerator)
         {
+            _logger = logger;
             _itemGenerator = itemGenerator;
         }
-
-        //public StreamService(ILogger<StreamService> logger, IItemGenerator itemGenerator)
-        //{
-        //    _logger = logger;
-        //    _itemGenerator = itemGenerator;
-        //}
 
         public async Task Stream(Action<object> sendAction)
         {
@@ -23,7 +18,7 @@
 
             do
             {
-                //_logger.LogInformation("Generating data to stream");
+                _logger.LogInformation("Generating data to stream");
 
                 var item = await _itemGenerator.GenerateOneAsync();
 
@@ -33,7 +28,7 @@
             }
             while (itemsQuantity > 0);
 
-            //_logger.LogInformation("Finished stream");
+            _logger.LogInformation("Finished stream");
         }
     }
 }
