@@ -3,4 +3,5 @@ Based on [this article](https://medium.com/@sergioprates/criando-uma-api-streami
 It uses [this platform](https://www.4devs.com.br/gerador_de_veiculos) to generate vehicles (in brazilian pattern), make a few conversions and display the result.    
     
 ## Custom
-Create a class and inherit it from IItemGenerator.cs.
+Create your own service and inherit it from IItemGenerator.cs.    
+Remember to add it to ServiceCollection.
