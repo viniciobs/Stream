@@ -2,6 +2,6 @@
 {
     public interface IStreamService
     {
-        public Task Stream(Action<object> sendAction);
+        public Task Stream(Action<object> sendAction, CancellationToken cancellationToken);
     }
 }

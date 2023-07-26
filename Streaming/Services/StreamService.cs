@@ -11,7 +11,7 @@
             _itemGenerator = itemGenerator;
         }
 
-        public async Task Stream(Action<object> sendAction)
+        public async Task Stream(Action<object> sendAction, CancellationToken cancellationToken)
         {
             var random = new Random();
             var itemsQuantity = random.Next(1000, 9999);
@@ -26,7 +26,7 @@
 
                 itemsQuantity--;
             }
-            while (itemsQuantity > 0);
+            while (itemsQuantity > 0 && cancellationToken.IsCancellationRequested is false);
 
             _logger.LogInformation("Finished stream");
         }

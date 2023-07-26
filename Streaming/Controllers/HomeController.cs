@@ -14,7 +14,9 @@ namespace Streaming.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<IActionResult> Index([FromServices] IStreamService streamService)
+        public async Task<IActionResult> Index(
+            [FromServices] IStreamService streamService,
+            CancellationToken cancellationToken)
         {
             _logger.LogInformation("Requested stream");
 
@@ -23,7 +25,7 @@ namespace Streaming.Controllers
                 streamService.Stream((object obj) =>
                 {
                     Send(obj);
-                });
+                }, cancellationToken);
 
                 return Streaming();
             }
