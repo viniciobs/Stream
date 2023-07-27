@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  stream-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "cars_json_stream"
+    image: stream:1.0.1
+    ports:
+      - "5068:80"
+    environment:
+      ASPNETCORE_URLS: http://+
+      ASPNETCORE_HTTPS_PORT: 5068
+      ASPNETCORE_ENVIRONMENT: Development
